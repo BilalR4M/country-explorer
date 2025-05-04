@@ -1,5 +1,8 @@
 # Country Explorer: Technical Report
 
+## Deployed Site URL
+https://country-explorer-8salkcu96-bilalr4ms-projects.vercel.app/
+
 ## API Selection
 
 ### REST Countries API
