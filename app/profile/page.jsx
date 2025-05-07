@@ -137,12 +137,17 @@ export default function ProfilePage() {
           </div>
 
           {/* Country Information Card */}
-          {loading ? (
-            <p className="text-muted-foreground">Loading country information...</p>
-          ) : countryData ? (
-            <CountryCard country={countryData} />
-          ) : (
-            <p className="text-muted-foreground">No country information found.</p>
+          {user?.location && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-4">My Country</h3>
+              {loading ? (
+                <p className="text-muted-foreground">Loading country information...</p>
+              ) : countryData ? (
+                <CountryCard country={countryData} />
+              ) : (
+                <p className="text-muted-foreground">No country information found.</p>
+              )}
+            </div>
           )}
         </CardContent>
         
