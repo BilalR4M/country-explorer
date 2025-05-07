@@ -3,14 +3,16 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Globe, Menu } from "lucide-react"
+import { Globe, Menu, LogIn } from "lucide-react"
 import { useState } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DarkModeToggle } from "@/components/dark-mode-toggle"
+import { useSession } from "next-auth/react"
 
 export default function Header() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const { data: session } = useSession()
 
   const isActive = (path) => pathname === path
 
@@ -41,6 +43,21 @@ export default function Header() {
             ))}
           </nav>
 
+          {!session ? (
+            <Link href="/login" passHref>
+              <Button variant="ghost" size="sm" className="gap-1">
+                <LogIn className="h-4 w-4" />
+                <span>Login</span>
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/api/auth/signout" passHref>
+              <Button variant="ghost" size="sm">
+                Sign out
+              </Button>
+            </Link>
+          )}
+
           <DarkModeToggle />
 
           <Sheet open={open} onOpenChange={setOpen}>
@@ -64,6 +81,24 @@ export default function Header() {
                     {item.name}
                   </Link>
                 ))}
+                {!session ? (
+                  <Link
+                    href="/login"
+                    className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground flex items-center gap-2"
+                    onClick={() => setOpen(false)}
+                  >
+                    <LogIn className="h-4 w-4" />
+                    <span>Login</span>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/api/auth/signout"
+                    className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+                    onClick={() => setOpen(false)}
+                  >
+                    Sign out
+                  </Link>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
