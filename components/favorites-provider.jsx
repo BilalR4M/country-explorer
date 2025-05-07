@@ -69,7 +69,14 @@ export function FavoritesProvider({ children }) {
   }
 
   const clearFavorites = () => {
-    setFavorites([])
+    // Directly clear localStorage first to ensure it's updated
+    try {
+      localStorage.removeItem("favorites")
+      // Then update the state
+      setFavorites([])
+    } catch (error) {
+      console.error("Error clearing favorites:", error)
+    }
   }
 
   return (
