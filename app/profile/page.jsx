@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Github, MapPin, Users } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { getCountriesByName } from "@/lib/api";
+import CountryCard from "@/components/country-card";
 import { 
   Card, 
   CardHeader, 
@@ -23,6 +26,35 @@ export default function ProfilePage() {
       redirect("/login");
     },
   });
+
+  const [countryData, setCountryData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchCountryData() {
+      if (session?.user?.location) {
+        setLoading(true);
+        try {
+          // Get the first word from location as it's likely the country name
+          const locationParts = session.user.location.split(",");
+          const countryName = locationParts[locationParts.length - 1].trim();
+          
+          const countries = await getCountriesByName(countryName);
+          if (countries && countries.length > 0) {
+            setCountryData(countries[0]);
+          }
+        } catch (error) {
+          console.error("Error fetching country data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
+
+    if (session?.user) {
+      fetchCountryData();
+    }
+  }, [session]);
 
   // Show loading state while session is loading
   if (status === "loading") {
@@ -103,6 +135,15 @@ export default function ProfilePage() {
               </div>
             </dl>
           </div>
+
+          {/* Country Information Card */}
+          {loading ? (
+            <p className="text-muted-foreground">Loading country information...</p>
+          ) : countryData ? (
+            <CountryCard country={countryData} />
+          ) : (
+            <p className="text-muted-foreground">No country information found.</p>
+          )}
         </CardContent>
         
         <CardFooter className="border-t bg-muted/50 py-4">
