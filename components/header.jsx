@@ -3,11 +3,20 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Globe, Menu, LogIn } from "lucide-react"
+import { Globe, Menu, LogIn, User } from "lucide-react"
 import { useState } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DarkModeToggle } from "@/components/dark-mode-toggle"
 import { useSession } from "next-auth/react"
+import Image from "next/image"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function Header() {
   const pathname = usePathname()
@@ -51,11 +60,40 @@ export default function Header() {
               </Button>
             </Link>
           ) : (
-            <Link href="/api/auth/signout" passHref>
-              <Button variant="ghost" size="sm">
-                Sign out
-              </Button>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  {session.user?.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt={session.user.name || "Profile"}
+                      width={24}
+                      height={24}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <User className="h-4 w-4" />
+                  )}
+                  <span className="hidden md:inline">
+                    {session.user?.name?.split(" ")[0] || "Account"}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer w-full">
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/api/auth/signout" className="cursor-pointer w-full">
+                    Sign Out
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
 
           <DarkModeToggle />
@@ -91,13 +129,23 @@ export default function Header() {
                     <span>Login</span>
                   </Link>
                 ) : (
-                  <Link
-                    href="/api/auth/signout"
-                    className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
-                    onClick={() => setOpen(false)}
-                  >
-                    Sign out
-                  </Link>
+                  <>
+                    <Link
+                      href="/profile"
+                      className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground flex items-center gap-2"
+                      onClick={() => setOpen(false)}
+                    >
+                      <User className="h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                    <Link
+                      href="/api/auth/signout"
+                      className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+                      onClick={() => setOpen(false)}
+                    >
+                      Sign out
+                    </Link>
+                  </>
                 )}
               </nav>
             </SheetContent>
