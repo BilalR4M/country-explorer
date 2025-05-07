@@ -61,6 +61,7 @@ export const authOptions = {
       return token;
     },
   },
+  debug: true, // <--- enable this
 }
 
 const handler = NextAuth(authOptions)
