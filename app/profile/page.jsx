@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { Github, MapPin, Users, BookOpen, ExternalLink } from "lucide-react";
+import { Github, MapPin, Users } from "lucide-react";
 import Link from "next/link";
 import { 
   Card, 
@@ -90,13 +90,6 @@ export default function ProfilePage() {
                 <strong>{user?.followers || 0}</strong> followers · <strong>{user?.following || 0}</strong> following
               </span>
             </div>
-            
-            {user?.public_repos !== undefined && (
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <BookOpen className="h-4 w-4" />
-                <span><strong>{user.public_repos}</strong> repositories</span>
-              </div>
-            )}
           </div>
           
           <Separator />
@@ -107,10 +100,6 @@ export default function ProfilePage() {
               <div className="flex flex-col sm:flex-row sm:gap-2">
                 <dt className="font-medium text-muted-foreground">Email:</dt>
                 <dd>{user?.email || "No email provided"}</dd>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:gap-2">
-                <dt className="font-medium text-muted-foreground">User ID:</dt>
-                <dd>{user?.id}</dd>
               </div>
             </dl>
           </div>
