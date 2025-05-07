@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Globe, Menu, LogIn, User } from "lucide-react"
+import { Globe, Menu, LogIn, User, Heart } from "lucide-react"
 import { useState } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DarkModeToggle } from "@/components/dark-mode-toggle"
@@ -26,6 +26,11 @@ export default function Header() {
   const isActive = (path) => pathname === path
 
   const navItems = [{ name: "Home", path: "/" }]
+  
+  // Add favorites to nav items only for logged in users
+  if (session) {
+    navItems.push({ name: "Favorites", path: "/favorites" })
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -43,10 +48,11 @@ export default function Header() {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 ${
                   isActive(item.path) ? "text-foreground" : "text-muted-foreground"
                 }`}
               >
+                {item.path === "/favorites" && <Heart className="h-3.5 w-3.5" />}
                 {item.name}
               </Link>
             ))}
@@ -88,6 +94,11 @@ export default function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/favorites" className="cursor-pointer w-full">
+                    My Favorites
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/api/auth/signout" className="cursor-pointer w-full">
                     Sign Out
                   </Link>
@@ -113,9 +124,10 @@ export default function Header() {
                     href={item.path}
                     className={`text-sm font-medium transition-colors hover:text-primary ${
                       isActive(item.path) ? "text-foreground" : "text-muted-foreground"
-                    }`}
+                    } ${item.path === "/favorites" ? "flex items-center gap-1" : ""}`}
                     onClick={() => setOpen(false)}
                   >
+                    {item.path === "/favorites" && <Heart className="h-3.5 w-3.5" />}
                     {item.name}
                   </Link>
                 ))}
