@@ -1,5 +1,6 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 // Create a mock component that mimics the structure of CountryCard
 // but without any external dependencies
@@ -12,6 +13,11 @@ const MockCountryCard = ({ country }) => (
   </div>
 );
 
+// Mock modules that Next.js relies on
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
+
 // Test the mock component
 describe('MockCountryCard Component', () => {
   it('renders country information correctly', () => {
@@ -22,21 +28,21 @@ describe('MockCountryCard Component', () => {
       capital: ['Washington, D.C.']
     };
     
-    const { getByText, getByTestId } = render(<MockCountryCard country={mockCountry} />);
+    render(<MockCountryCard country={mockCountry} />);
     
     // Check if the component renders
-    expect(getByTestId('country-card')).toBeTruthy();
+    expect(screen.getByTestId('country-card')).toBeInTheDocument();
     
     // Check if country name is displayed
-    expect(getByText('United States')).toBeTruthy();
+    expect(screen.getByText('United States')).toBeInTheDocument();
     
     // Check if population is displayed
-    expect(getByText(/331,002,651/)).toBeTruthy();
+    expect(screen.getByText(/331,002,651/)).toBeInTheDocument();
     
     // Check if region is displayed
-    expect(getByText(/Americas/)).toBeTruthy();
+    expect(screen.getByText(/Americas/)).toBeInTheDocument();
     
     // Check if capital is displayed
-    expect(getByText(/Washington, D.C./)).toBeTruthy();
+    expect(screen.getByText(/Washington, D.C./)).toBeInTheDocument();
   });
 });

@@ -1,4 +1,4 @@
-import { cn } from '../lib/utils';
+import { cn } from '@/lib/utils';
 
 describe('cn function', () => {
   it('should handle a single class name', () => {
@@ -20,7 +20,9 @@ describe('cn function', () => {
 
   it('should handle falsy values', () => {
     expect(cn('base-class', false, null, undefined, 0, '')).toBe('base-class');
-  });  // This test verifies that cn function combines classnames correctly
+  });
+  
+  // This test verifies that cn function combines classnames correctly
   it('should handle Tailwind class combinations', () => {
     // Test that multiple classes are combined
     const result = cn('px-2 py-1', 'p-3');

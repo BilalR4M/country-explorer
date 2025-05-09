@@ -19,6 +19,7 @@ A modern web application built with Next.js 14 that allows users to explore coun
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/) with Google and GitHub providers
 - **API**: [REST Countries API](https://restcountries.com/)
+- **Testing**: Jest and React Testing Library
 
 ## Setup Instructions
 
@@ -33,3 +34,37 @@ A modern web application built with Next.js 14 that allows users to explore coun
 ```bash
 git clone https://github.com/yourusername/country-explorer.git
 cd country-explorer
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Configure environment variables:
+```
+# Create a .env.local file with your authentication provider keys
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+## Testing
+
+The project includes comprehensive tests built with Jest and React Testing Library.
+
+To run tests:
+
+```bash
+npm test
+```
+
+For watch mode:
+
+```bash
+npm run test:watch
+```
+
+See the [Testing Guide](./TESTING_GUIDE.md) for detailed information about the testing setup and guidelines for writing tests.
