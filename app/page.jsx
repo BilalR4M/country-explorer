@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import SearchBar from "@/components/search-bar"
 import RegionFilter from "@/components/region-filter"
 import CountryGrid from "@/components/country-grid"
@@ -11,9 +11,11 @@ export default function HomePage() {
   const [countries, setCountries] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const searchParams = useSearchParams()
+  const router = useRouter()
 
   const search = searchParams?.get("search") || ""
   const region = searchParams?.get("region") || ""
+  const currentPage = parseInt(searchParams?.get("page") || "1", 10)
 
   useEffect(() => {
     async function fetchData() {
@@ -52,7 +54,18 @@ export default function HomePage() {
             ))}
         </div>
       ) : (
-        <CountryGrid countries={countries} search={search} region={region} />
+        <CountryGrid 
+          countries={countries} 
+          search={search} 
+          region={region} 
+          page={currentPage}
+          onPageChange={(page) => {
+            // Create a new URL with the updated page parameter
+            const params = new URLSearchParams(searchParams.toString())
+            params.set("page", page.toString())
+            router.push(`?${params.toString()}`)
+          }}
+        />
       )}
     </div>
   )

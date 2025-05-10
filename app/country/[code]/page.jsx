@@ -7,8 +7,9 @@ import { notFound } from "next/navigation"
 
 export async function generateMetadata({ params }) {
   try {
-    // Ensure params is properly resolved before accessing properties
-    const code = params?.code
+    // Await params before accessing properties
+    const resolvedParams = await params
+    const code = resolvedParams?.code
     if (!code) return { title: "Country Not Found" }
     
     const country = await getCountryByCode(code)
@@ -25,8 +26,9 @@ export default async function CountryPage({ params }) {
   let borderCountries = []
 
   try {
-    // Ensure params is properly resolved before accessing properties
-    const code = params?.code
+    // Await params before accessing properties
+    const resolvedParams = await params
+    const code = resolvedParams?.code
     if (!code) {
       notFound()
     }
